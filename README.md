@@ -131,5 +131,5 @@ Para aplicação em veículo real, são necessários testes complementares, dime
 ## Instituição
 
 Centro Universitário FEI  
-Engenharia Mecânica  
+Engenharia Mecânica Plena
 Trabalho de Conclusão de Curso
