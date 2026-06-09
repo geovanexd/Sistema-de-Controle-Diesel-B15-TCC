@@ -1,3 +1,65 @@
+# Sistema de Controle Diesel B15 - TCC
+
+Repositório desenvolvido como parte do Trabalho de Conclusão de Curso em Engenharia Mecânica.
+
+O projeto apresenta o firmware de controle eletrônico para um sistema de recirculação de combustível diesel B15 em tanque automotivo, com o objetivo de auxiliar na redução de contaminantes, água acumulada e formação de depósitos no sistema de combustível.
+
+## Objetivo do Projeto
+
+O sistema tem como objetivo controlar o acionamento de uma bomba e de uma válvula de recirculação, verificando previamente condições mínimas de segurança para operação.
+
+As condições verificadas são:
+
+- Tensão da bateria;
+- Nível do tanque;
+- Presença de água no filtro;
+- Acionamento manual pelo operador.
+
+Caso alguma condição esteja fora do limite estabelecido, o ciclo de recirculação é bloqueado e o LED de falha é acionado.
+
+## Funcionamento Geral
+
+O Arduino realiza continuamente a leitura dos sensores conectados ao sistema. A partir dessas leituras, o programa verifica se as condições mínimas de funcionamento foram atendidas.
+
+O ciclo de recirculação só é iniciado quando o botão manual é pressionado e todas as condições de segurança estão adequadas.
+
+Se as condições forem atendidas, o sistema aciona a válvula, aguarda um intervalo de segurança, liga a bomba por um tempo determinado e, ao final do ciclo, desliga novamente a bomba e a válvula.
+
+Se alguma condição não for atendida, o sistema bloqueia o funcionamento da bomba e da válvula, acionando o LED de falha.
+
+## Componentes Utilizados
+
+| Componente | Função |
+|---|---|
+| Arduino Mega | Unidade de controle do sistema |
+| Sensor de tensão | Monitoramento da bateria |
+| Sensor de nível | Verificação do nível do tanque |
+| Sensor de água | Detecção de água no filtro |
+| Botão manual | Acionamento do ciclo de recirculação |
+| Bomba | Recirculação do combustível |
+| Válvula | Direcionamento do fluxo |
+| LED | Indicação de falha |
+
+## Pinagem
+
+| Função | Pino |
+|---|---|
+| Sensor de bateria | A0 |
+| Sensor de nível | A1 |
+| Sensor de água | 22 |
+| Botão manual | 23 |
+| Bomba | 30 |
+| Válvula | 31 |
+| LED de falha | 34 |
+
+## Limites de Operação
+
+| Parâmetro | Valor |
+|---|---|
+| Tensão mínima da bateria | 12,2 V |
+| Nível mínimo do tanque | 20% |
+| Tempo de recirculação | 5 segundos |
+
 ## Lógica de Funcionamento
 
 O sistema foi desenvolvido para controlar a recirculação de combustível diesel B15 de forma segura, utilizando uma lógica simples de verificação de condições antes do acionamento da bomba e da válvula.
@@ -123,3 +185,49 @@ Se houver falha:
     Bloqueia bomba
     Bloqueia válvula
     Liga LED de falha
+```
+
+## Estrutura do Repositório
+
+```text
+Sistema-de-Controle-Diesel-B15-TCC/
+│
+├── firmware/
+│   └── controle_recirculacao_b15.ino
+│
+└── README.md
+```
+
+## Código-Fonte
+
+O código-fonte do sistema está localizado na pasta:
+
+```text
+firmware/controle_recirculacao_b15.ino
+```
+
+Esse arquivo contém a lógica de leitura dos sensores, verificação das condições de operação, acionamento da válvula, acionamento da bomba e indicação de falha.
+
+## Finalidade da Lógica de Controle
+
+A lógica desenvolvida tem como finalidade representar, em escala de bancada, um sistema de controle aplicado à recirculação de combustível em tanque automotivo.
+
+O controle busca impedir o funcionamento da bomba em condições inadequadas, contribuindo para maior segurança operacional e melhor proteção dos componentes do sistema.
+
+## Observações
+
+Este sistema foi desenvolvido em escala de bancada para fins acadêmicos.
+
+Para aplicação em veículo real, são necessários testes adicionais, dimensionamento elétrico adequado, proteção dos circuitos, validação dos sensores e adequação dos componentes ao ambiente automotivo.
+
+## Autores
+
+- Geovane Ferretti Caldeirão Prado
+- Victor Augusto Oliveira da Silva
+- Igor Neves Santos
+
+## Instituição
+
+Centro Universitário FEI  
+Engenharia Mecânica  
+Trabalho de Conclusão de Curso
