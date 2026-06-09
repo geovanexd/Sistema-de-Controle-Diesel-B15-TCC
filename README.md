@@ -1,76 +1,125 @@
-# Sistema de Controle Diesel B15 - TCC
+## Lógica de Funcionamento
 
-Repositório desenvolvido como parte do Trabalho de Conclusão de Curso em Engenharia Mecânica.
+O sistema foi desenvolvido para controlar a recirculação de combustível diesel B15 de forma segura, utilizando uma lógica simples de verificação de condições antes do acionamento da bomba e da válvula.
 
-O projeto apresenta o firmware de controle eletrônico para um sistema de recirculação de combustível diesel B15 em tanque automotivo, com o objetivo de auxiliar na redução de contaminantes, água acumulada e formação de depósitos no sistema de combustível.
+O Arduino realiza continuamente a leitura dos sensores conectados ao sistema. As entradas utilizadas são:
 
-## Objetivo do Projeto
+- Sensor de bateria, ligado ao pino A0;
+- Sensor de nível do tanque, ligado ao pino A1;
+- Sensor de água no filtro, ligado ao pino digital 22;
+- Botão manual de acionamento, ligado ao pino digital 23.
 
-O sistema tem como objetivo controlar o acionamento de uma bomba e de uma válvula de recirculação, verificando previamente condições mínimas de segurança para operação.
+As saídas controladas pelo Arduino são:
 
-As condições verificadas são:
+- Bomba de recirculação, ligada ao pino digital 30;
+- Válvula de direcionamento do fluxo, ligada ao pino digital 31;
+- LED de falha, ligado ao pino digital 34.
 
-- Tensão da bateria;
-- Nível do tanque;
-- Presença de água no filtro;
-- Acionamento manual pelo operador.
+## Etapas de Operação
 
-Caso alguma condição esteja fora do limite estabelecido, o ciclo de recirculação é bloqueado e o LED de falha é acionado.
+### 1. Leitura dos sensores
 
-## Funcionamento do Sistema
+O sistema inicia realizando a leitura da tensão da bateria e do nível do tanque.
 
-O Arduino realiza a leitura contínua dos sensores e exibe os dados no Monitor Serial.
+A tensão da bateria é calculada a partir da leitura analógica do pino A0, sendo convertida para uma escala de até 15 V.
 
-Quando o botão manual é pressionado, o sistema verifica se todas as condições de operação estão adequadas.
+O nível do tanque é lido pelo pino A1 e convertido para uma escala percentual de 0 a 100%.
 
-Se as condições forem atendidas:
+Além disso, o sistema verifica se há presença de água no filtro e se o botão manual foi pressionado.
 
-1. A válvula é acionada;
-2. Após 1 segundo, a bomba é ligada;
-3. A recirculação permanece ativa por 5 segundos;
-4. A bomba e a válvula são desligadas.
+### 2. Verificação das condições de segurança
 
-Se alguma condição não for atendida, o sistema bloqueia o ciclo e aciona o LED de falha.
+Antes de iniciar a recirculação, o sistema verifica três condições principais:
 
-## Componentes Utilizados
-
-| Componente | Função |
+| Condição | Limite adotado |
 |---|---|
-| Arduino Mega | Unidade de controle do sistema |
-| Sensor de tensão | Monitoramento da bateria |
-| Sensor de nível | Verificação do nível do tanque |
-| Sensor de água | Detecção de água no filtro |
-| Botão manual | Acionamento do ciclo de recirculação |
-| Bomba | Recirculação do combustível |
-| Válvula | Direcionamento do fluxo |
-| LED | Indicação de falha |
+| Tensão da bateria | Igual ou maior que 12,2 V |
+| Nível do tanque | Igual ou maior que 20% |
+| Presença de água | Não pode haver água detectada |
 
-## Pinagem
+Se qualquer uma dessas condições não for atendida, o sistema considera que há uma condição insegura de operação.
 
-| Função | Pino |
-|---|---|
-| Sensor de bateria | A0 |
-| Sensor de nível | A1 |
-| Sensor de água | 22 |
-| Botão manual | 23 |
-| Bomba | 30 |
-| Válvula | 31 |
-| LED de falha | 34 |
+### 3. Indicação de falha
 
-## Limites de Operação
+Quando alguma condição de segurança não é atendida, o LED de falha é acionado.
 
-| Parâmetro | Valor |
-|---|---|
-| Tensão mínima da bateria | 12,2 V |
-| Nível mínimo do tanque | 20% |
-| Tempo de recirculação | 5 segundos |
+Isso indica que o sistema não está autorizado a iniciar o ciclo de recirculação.
 
-## Estrutura do Repositório
+As possíveis causas de falha são:
+
+- Bateria com tensão abaixo do limite definido;
+- Nível de combustível abaixo de 20%;
+- Presença de água detectada no filtro.
+
+### 4. Acionamento manual
+
+O ciclo de recirculação só é iniciado quando o botão manual é pressionado.
+
+Ao pressionar o botão, o sistema verifica novamente todas as condições de segurança.
+
+Se estiver tudo correto, o ciclo é liberado.
+
+Se houver falha, o ciclo é bloqueado.
+
+### 5. Ciclo de recirculação
+
+Quando as condições estão adequadas, o sistema executa a seguinte sequência:
+
+1. O LED de falha permanece desligado;
+2. A válvula é acionada;
+3. O sistema aguarda 1 segundo;
+4. A bomba é acionada;
+5. A recirculação permanece ativa por 5 segundos;
+6. A bomba é desligada;
+7. A válvula é desligada;
+8. O ciclo é finalizado.
+
+Essa lógica evita que a bomba funcione em condições inadequadas, como baixa tensão, baixo nível de combustível ou presença de água no filtro.
+
+### 6. Bloqueio do ciclo
+
+Caso alguma condição esteja fora dos limites definidos, o sistema bloqueia o ciclo.
+
+Nesse caso:
+
+- A bomba permanece desligada;
+- A válvula permanece desligada;
+- O LED de falha é acionado;
+- Uma mensagem de bloqueio é exibida no Monitor Serial.
+
+## Resumo da Lógica
 
 ```text
-Sistema-de-Controle-Diesel-B15-TCC/
-│
-├── firmware/
-│   └── controle_recirculacao_b15.ino
-│
-└── README.md
+Início
+  ↓
+Leitura da bateria
+  ↓
+Leitura do nível do tanque
+  ↓
+Verificação do sensor de água
+  ↓
+Verificação do botão manual
+  ↓
+Botão pressionado?
+  ↓
+Não → Continua monitorando
+  ↓
+Sim
+  ↓
+Bateria ≥ 12,2 V?
+  ↓
+Nível ≥ 20%?
+  ↓
+Água detectada?
+  ↓
+Se as condições estiverem corretas:
+    Aciona válvula
+    Aguarda 1 segundo
+    Aciona bomba
+    Mantém recirculação por 5 segundos
+    Desliga bomba e válvula
+  ↓
+Se houver falha:
+    Bloqueia bomba
+    Bloqueia válvula
+    Liga LED de falha
