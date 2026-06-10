@@ -95,17 +95,6 @@ Sim → Aciona válvula → Aciona bomba → Finaliza ciclo
 Não → Bloqueia sistema → Aciona LED de falha
 ```
 
-## Estrutura do Repositório
-
-```text
-Sistema-de-Controle-Diesel-B15-TCC/
-│
-├── firmware/
-│   └── controle_recirculacao_b15.ino
-│
-└── README.md
-```
-
 ## Código-Fonte
 
 O código-fonte do sistema está localizado em:
